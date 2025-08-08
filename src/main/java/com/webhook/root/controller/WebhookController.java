@@ -23,6 +23,6 @@ public class WebhookController {
     public String receiveWebhook(@RequestBody Webhook webhook) {
 
         webhookService.receiveWebhook(webhook);
-        return "Webhook received: " + webhook.getRequestBody();
+        return "Webhook received: " + webhook.getPayload();
     }
 }

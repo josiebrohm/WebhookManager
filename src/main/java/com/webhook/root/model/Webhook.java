@@ -1,46 +1,66 @@
 package com.webhook.root.model;
 
+//@Entity
 public class Webhook {
-    private String method;
-    private String url;
-    private String requestBody;
 
-    public Webhook(String method, String url, String requestBody) {
-        this.method = method;
-        this.url = url;
-        this.requestBody = requestBody;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    private String httpMethod;
+    private String targetUrl;
+    private String payload;
+
+    public Webhook(String httpMethod, String targetUrl, String payload) {
+        this.httpMethod = httpMethod;
+        this.targetUrl = targetUrl;
+        this.payload = payload;
     }
 
-    public String getMethod() {
-        return method;
+    public Webhook() {
+
     }
 
-    public void setMethod(String method) {
-        this.method = method;
+    public long getId() {
+        return id;
     }
 
-    public String getUrl() {
-        return url;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public String getHttpMethod() {
+        return httpMethod;
     }
 
-    public String getRequestBody() {
-        return requestBody;
+    public void setHttpMethod(String httpMethod) {
+        this.httpMethod = httpMethod;
     }
 
-    public void setRequestBody(String requestBody) {
-        this.requestBody = requestBody;
+    public String getTargetUrl() {
+        return targetUrl;
+    }
+
+    public void setTargetUrl(String targetUrl) {
+        this.targetUrl = targetUrl;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
     @Override
     public String toString() {
         return "Webhook{" +
-                "method='" + method + '\'' +
-                ", url='" + url + '\'' +
-                ", requestBody='" + requestBody + '\'' +
+                "id='" + id + '\'' +
+                "httpMethod='" + httpMethod + '\'' +
+                ", targetUrl='" + targetUrl + '\'' +
+                ", payload='" + payload + '\'' +
                 '}';
     }
+
 }
