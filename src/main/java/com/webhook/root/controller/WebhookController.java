@@ -2,6 +2,7 @@ package com.webhook.root.controller;
 
 import com.webhook.root.model.Webhook;
 import com.webhook.root.service.WebhookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -10,6 +11,7 @@ public class WebhookController {
 
     private final WebhookService webhookService;
 
+    @Autowired
     public WebhookController(WebhookService webhookService) {
         this.webhookService = webhookService;
     }
@@ -19,10 +21,13 @@ public class WebhookController {
         return "Welcome! How'd you GET here?";
     }
 
-    @PostMapping
-    public String receiveWebhook(@RequestBody Webhook webhook) {
+    @GetMapping("/webhooks")
+    public Iterable<Webhook> getAllWebhooks() {
+        return this.webhookService.getAllWebhooks();
+    }
 
-        webhookService.receiveWebhook(webhook);
-        return "Webhook received: " + webhook.getPayload();
+    @PostMapping("/webhooks")
+    public Webhook addWebhook(@RequestBody Webhook webhook) {
+        return this.webhookService.saveWebhook(webhook);
     }
 }

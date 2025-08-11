@@ -1,45 +1,60 @@
 package com.webhook.root.service;
 
 import com.webhook.root.model.Webhook;
+import com.webhook.root.repository.WebhookRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WebhookService {
+    private final WebhookRepository webhookRepository;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private final List<Webhook> webhooks = new ArrayList<>();
+    @Autowired
+    public WebhookService(WebhookRepository webhookRepository) {
+        this.webhookRepository = webhookRepository;
+    }
 
     public List<Webhook> getAllWebhooks() {
-        return webhooks;
+        return webhookRepository.findAll();
     }
 
-    public void receiveWebhook(Webhook webhook) {
-        webhooks.add(webhook);
-        forwardWebhook(webhook);
+    public Optional<Webhook> findById(Long id) {
+        return webhookRepository.findById(id);
     }
 
-    public void forwardWebhook(Webhook webhook) {
+    public Webhook saveWebhook(Webhook webhook) {
+        webhookRepository.save(webhook);
+        forward(webhook);
+        return webhook;
+    }
+
+    public void forward(Webhook webhook) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> request = new HttpEntity<>(webhook.getPayload(), headers);
+        HttpEntity<String> payload = new HttpEntity<>(webhook.getPayload(), headers);
 
         try {
-            String response = restTemplate.postForObject(webhook.getTargetUrl(), request, String.class);
+            String response = restTemplate.postForObject(webhook.getTargetUrl(), payload, String.class);
             System.out.println("Webhook forwarding successful");
             System.out.println(response);
         } catch (RestClientException e){
             System.out.println("Error forwarding webhook: ");
             System.out.println(e.getMessage());
         }
+    }
+
+    public void deleteById(Long id) {
+        webhookRepository.deleteById(id);
     }
 }

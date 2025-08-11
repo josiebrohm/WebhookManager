@@ -1,40 +1,44 @@
 package com.webhook.root.model;
 
-//@Entity
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "webhook_events")
 public class Webhook {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long requestId;
 
-    private String httpMethod; // might be redundant
+    @Column(name = "target_url")
     private String targetUrl;
+
+    @Column(name = "source_url")
+    private String sourceUrl;
+
+    @Column(name = "payload")
     private String payload;
 
-    public Webhook(String httpMethod, String targetUrl, String payload) {
-        this.httpMethod = httpMethod;
+    @Column(name = "customer_id")
+    private Long customerId;
+
+    public Webhook(String targetUrl, String sourceUrl, String payload, Long customerId) {
         this.targetUrl = targetUrl;
+        this.sourceUrl = sourceUrl;
         this.payload = payload;
+        this.customerId = customerId;
     }
 
     public Webhook() {
 
     }
 
-    public long getId() {
-        return id;
+    public Long getRequestId() {
+        return requestId;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getHttpMethod() {
-        return httpMethod;
-    }
-
-    public void setHttpMethod(String httpMethod) {
-        this.httpMethod = httpMethod;
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
     }
 
     public String getTargetUrl() {
@@ -45,6 +49,14 @@ public class Webhook {
         this.targetUrl = targetUrl;
     }
 
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
+    }
+
     public String getPayload() {
         return payload;
     }
@@ -53,14 +65,22 @@ public class Webhook {
         this.payload = payload;
     }
 
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
     @Override
     public String toString() {
         return "Webhook{" +
-                "id='" + id + '\'' +
-                "httpMethod='" + httpMethod + '\'' +
+                "requestId=" + requestId +
                 ", targetUrl='" + targetUrl + '\'' +
+                ", sourceUrl='" + sourceUrl + '\'' +
                 ", payload='" + payload + '\'' +
+                ", customerId='" + customerId + '\'' +
                 '}';
     }
-
 }
