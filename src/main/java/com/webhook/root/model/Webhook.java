@@ -7,7 +7,7 @@ public class Webhook {
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String httpMethod;
+    private String httpMethod; // might be redundant
     private String targetUrl;
     private String payload;
 
