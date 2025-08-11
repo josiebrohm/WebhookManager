@@ -1,6 +1,6 @@
 package com.webhook.root.model;
 
-//@Entity
+// @Entity
 public class Webhook {
 
 //    @Id
