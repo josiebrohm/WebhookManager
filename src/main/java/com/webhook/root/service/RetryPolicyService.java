@@ -10,7 +10,6 @@ import java.time.Instant;
 @Service
 public class RetryPolicyService {
     private final TaskRepository taskRepository;
-    private final int MAX_ATTEMPTS = 10;
 
     public RetryPolicyService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
@@ -20,7 +19,8 @@ public class RetryPolicyService {
         int attempts = task.getAttemptNumber() + 1;
         task.setAttemptNumber(attempts);
 
-        if (attempts >= MAX_ATTEMPTS) {
+        int maxAttempts = 10;
+        if (attempts >= maxAttempts) {
             // something must be broken, stop retrying
             task.setTaskStatus(TaskStatus.FAILED);
             task.setRetryDate(null);
@@ -29,10 +29,14 @@ public class RetryPolicyService {
             task.setTaskStatus(TaskStatus.PENDING);
             Instant nextRetry = calculateNextRetry(attempts);
 
-            if (nextRetry != null) {
-                task.setRetryDate(nextRetry);
+            if (nextRetry == null) {
+                task.setTaskStatus(TaskStatus.FAILED);
             }
+
+            task.setRetryDate(nextRetry);
         }
+
+        taskRepository.save(task);
     }
 
     private Instant calculateNextRetry(int attempts) {
@@ -55,8 +59,6 @@ public class RetryPolicyService {
                     Instant.now().plusSeconds(12 * 60 * 60);
             case 9 -> // 24 hours
                     Instant.now().plusSeconds(24 * 60 * 60);
-            case 10 -> // 48 hours
-                    Instant.now().plusSeconds(48 * 60 * 60);
             default -> null;
         };
     }
