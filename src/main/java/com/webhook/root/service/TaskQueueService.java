@@ -9,7 +9,6 @@ import java.util.Optional;
 /**
  * Manages underlying PriorityBlockingQueue.
  */
-@Service
 public interface TaskQueueService {
     /**
      * Add a task to the in-memory queue.
