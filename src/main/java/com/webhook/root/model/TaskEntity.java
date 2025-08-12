@@ -2,8 +2,7 @@ package com.webhook.root.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Table(name = "tasks")
@@ -21,12 +20,12 @@ public class TaskEntity {
     private int attemptNumber;
 
     @Column(name = "retry_date")
-    private LocalDateTime retryDate;
+    private Instant retryDate;
 
-    public TaskEntity(TaskStatus taskStatus, LocalDateTime retryDate) {
+    public TaskEntity(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
         this.attemptNumber = 0;
-        this.retryDate = retryDate;
+        this.retryDate = Instant.now();
     }
 
     public TaskEntity() {
@@ -57,11 +56,11 @@ public class TaskEntity {
         this.attemptNumber = attemptNumber;
     }
 
-    public LocalDateTime getRetryDate() {
+    public Instant getRetryDate() {
         return retryDate;
     }
 
-    public void setRetryDate(LocalDateTime retryDate) {
+    public void setRetryDate(Instant retryDate) {
         this.retryDate = retryDate;
     }
 }
