@@ -3,7 +3,6 @@ package com.webhook.root.service;
 import com.webhook.root.model.TaskEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.concurrent.PriorityBlockingQueue;
 
 @Service
@@ -11,8 +10,8 @@ public class TaskQueueServiceImpl implements TaskQueueService {
 
     private final PriorityBlockingQueue<TaskEntity> taskQueue;
 
-    public TaskQueueServiceImpl(PriorityBlockingQueue<TaskEntity> taskQueue) {
-        this.taskQueue = taskQueue;
+    public TaskQueueServiceImpl() {
+        this.taskQueue = new PriorityBlockingQueue<>();
     }
 
     @Override
@@ -21,7 +20,7 @@ public class TaskQueueServiceImpl implements TaskQueueService {
     }
 
     @Override
-    public Optional<TaskEntity> dequeue() {
-        return Optional.ofNullable(taskQueue.poll());
+    public TaskEntity dequeue() throws InterruptedException {
+        return taskQueue.take();
     }
 }

@@ -1,10 +1,6 @@
 package com.webhook.root.service;
 
 import com.webhook.root.model.TaskEntity;
-import com.webhook.root.repository.TaskRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 /**
  * Manages underlying PriorityBlockingQueue.
@@ -21,7 +17,7 @@ public interface TaskQueueService {
     /**
      * Retrieve and remove the next task in the queue
      *
-     * @return TaskEntity if successful OR Optional.empty() if queue is empty
+     * @return TaskEntity
      */
-    Optional<TaskEntity> dequeue();
+    TaskEntity dequeue() throws InterruptedException;
 }
