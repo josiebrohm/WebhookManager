@@ -21,7 +21,7 @@ public class TaskPollerService {
         this.taskQueueService = taskQueueService;
     }
 
-    @Scheduled(fixedDelay = 500)
+    @Scheduled(fixedDelay = 10)
     public void pollDatabaseForTasks() {
         // fetch tasks ready to be executed
         int batchSize = 50;
@@ -37,6 +37,7 @@ public class TaskPollerService {
                 taskRepository.save(task);
             } else {
                 // deal with full queue
+
                 break;
             }
         }
