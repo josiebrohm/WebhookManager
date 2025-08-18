@@ -1,10 +1,13 @@
 package com.webhook.root.config;
 
+import com.webhook.root.model.Task;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Configuration
 public class AsyncConfig {
@@ -19,5 +22,10 @@ public class AsyncConfig {
         executor.initialize();
 
         return executor;
+    }
+
+    @Bean
+    public BlockingQueue<Task> taskQueue() {
+        return new LinkedBlockingQueue<>();
     }
 }
