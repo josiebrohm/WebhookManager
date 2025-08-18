@@ -3,6 +3,7 @@ package com.webhook.root.service;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.webhook.root.model.WebhookJob;
@@ -17,14 +18,25 @@ public class WebhookProcessor {
     @Autowired
     private WebhookSender sender;
 
+    @Async("taskExecutor")
     public void process(WebhookJob job) {
+        System.out.println(
+            "Processing job " 
+            + job.getJobId() 
+            + " on thread " 
+            + Thread.currentThread().getName());
+
         // For now always fail the job, successes will be the easy part
         boolean successful = sender.trySend(job);
         
-        if (successful)
+        if (successful) {
+            System.out.println("Succeeded!" + job.getJobId() + " on thread " + Thread.currentThread().getName());
             handleSuccess(job);
-        else 
+        }
+        else {
+            System.out.println("FAILED!" + job.getJobId() + " on thread " + Thread.currentThread().getName());
             handleFailure(job);
+        }
     }
 
     private void handleSuccess(WebhookJob job) {

@@ -25,7 +25,7 @@ public class WebhookEventScheduler {
     @Autowired
     private WebhookProcessor processor;
 
-    @Scheduled(fixedRate = 750)
+    @Scheduled(fixedRate = 2000)
     public void logWebhookEvents() {
         List<WebhookJob> readyJobs = repo.findByStateAndRetryAtLessThanEqual(WebhookJob.State.PENDING, LocalDateTime.now());
 
@@ -33,10 +33,26 @@ public class WebhookEventScheduler {
             System.out.println("No ready jobs at " + LocalDateTime.now());
         } else {
             System.out.println("Ready jobs at " + LocalDateTime.now() + ":");
+            
             for (WebhookJob job : readyJobs) {
-                System.out.printf("  [id=%d] payload='%s' attempt=%d retryAt=%s%n",
-                        job.getJobId(), job.getPayload(), job.getAttempt(), job.getRetryAt());
+                int claimed = repo.claimJob(job.getJobId());
+
+                if (claimed == 1) {
+                    processor.process(job);
+                } else {
+                    // Job already claimed by another thread/process
+                    System.out.println("Job " + job.getJobId() + " was already claimed.");
+                }
+
+                System.out.printf(
+                "  [id=%d] payload='%s' attempt=%d retryAt=%s%n",
+                    job.getJobId(), 
+                    job.getPayload(), 
+                    job.getAttempt(), 
+                    job.getRetryAt());
+
                 System.out.print("processing job:");
+
                 processor.process(job);
             }
         }

@@ -33,7 +33,7 @@ public class WebhookJob {
     private Long customerId;
 
     public enum State {
-        PENDING, DEAD, SUCCESS, DELIVERED, PROCESSING
+        PENDING, DEAD, DELIVERED, PROCESSING
     }
 
     @Column(name = "state")
