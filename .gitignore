@@ -34,4 +34,4 @@ build/
 
 ### General ###
 .env
-start.ps1
+start.ps1.env

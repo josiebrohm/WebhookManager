@@ -46,7 +46,7 @@ public class WebhookJob {
     @Column(name = "attempt")
     private Integer attempt;
 
-  public Long getJobId() {
+    public Long getJobId() {
         return jobId;
     }
 
