@@ -23,7 +23,7 @@ public class KafkaTopicConfig {
     }
 
     @Bean
-    public NewTopic topic1() {
-        return new NewTopic("test_topic", 1, (short) 1);
+    public NewTopic mainTopic() {
+        return new NewTopic("main-topic", 1, (short) 1);
     }
 }
