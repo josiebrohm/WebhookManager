@@ -1,7 +1,7 @@
 package com.webhook.root.controller;
 
 import com.webhook.root.model.Webhook;
-import com.webhook.root.service.KafkaProducerService;
+import com.webhook.root.service.WebhookMessageProducer;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/messages")
 public class KafkaMessageController {
 
-    private final KafkaProducerService producerService;
+    private final WebhookMessageProducer producerService;
 
-    public KafkaMessageController(KafkaProducerService producerService) {
+    public KafkaMessageController(WebhookMessageProducer producerService) {
         this.producerService = producerService;
     }
 

@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import com.webhook.root.model.Webhook;
 
 @Service
-public class KafkaProducerService {
+public class WebhookMessageProducer {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public KafkaProducerService(KafkaTemplate<String, Object> kafkaTemplate) {
+    public WebhookMessageProducer(KafkaTemplate<String, Object> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 

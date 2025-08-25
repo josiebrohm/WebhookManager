@@ -9,9 +9,9 @@ import com.webhook.root.repository.WebhookRepository;
 public class WebhookReceiver {
 
 	private final WebhookRepository webhookRepository;
-	private final KafkaProducerService producerService;
+	private final WebhookMessageProducer producerService;
 
-	public WebhookReceiver(WebhookRepository webhookRepository, KafkaProducerService producerService) {
+	public WebhookReceiver(WebhookRepository webhookRepository, WebhookMessageProducer producerService) {
         this.webhookRepository = webhookRepository;
 		this.producerService = producerService;
     }
