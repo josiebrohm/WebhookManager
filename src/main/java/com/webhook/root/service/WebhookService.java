@@ -2,7 +2,6 @@ package com.webhook.root.service;
 
 import com.webhook.root.model.Webhook;
 import com.webhook.root.repository.WebhookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -19,7 +18,6 @@ public class WebhookService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Autowired
     public WebhookService(WebhookRepository webhookRepository) {
         this.webhookRepository = webhookRepository;
     }
