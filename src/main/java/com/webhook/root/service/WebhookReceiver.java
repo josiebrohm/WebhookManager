@@ -23,7 +23,6 @@ public class WebhookReceiver {
 		// add to kafka queue
         producerService.sendMessage("main-topic", webhook);
 
-
         return webhook;
 	}
 }

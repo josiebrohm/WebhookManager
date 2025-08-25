@@ -2,17 +2,17 @@ package com.webhook.root.controller;
 
 import com.webhook.root.model.Webhook;
 import com.webhook.root.service.WebhookReceiver;
-import com.webhook.root.service.WebhookService;
+import com.webhook.root.service.WebhookAdmin;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/")
 public class WebhookController {
 
-    private final WebhookService webhookService;
+    private final WebhookAdmin webhookService;
 	private final WebhookReceiver webhookReceiver;
 
-    public WebhookController(WebhookService webhookService, WebhookReceiver webhookReceiver) {
+    public WebhookController(WebhookAdmin webhookService, WebhookReceiver webhookReceiver) {
         this.webhookService = webhookService;
 		this.webhookReceiver = webhookReceiver;
     }
