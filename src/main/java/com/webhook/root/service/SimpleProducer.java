@@ -14,4 +14,9 @@ public class SimpleProducer {
 		kafkaTemplate.send("test-topic", message);
 		System.out.println("Sent: " + message);
 	}
+
+	public void sendToTopic(String topic, String message) {
+		kafkaTemplate.send(topic, message);
+		System.out.println("Sent to " + topic + ": " + message);
+	}
 }
