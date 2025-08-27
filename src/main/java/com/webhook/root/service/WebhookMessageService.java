@@ -22,7 +22,7 @@ public class WebhookMessageService {
 		return webhookMessage;
 	}
 
-	public List<WebhookMessage> getAllEndpoints() {
+	public List<WebhookMessage> getAllWebhookMessages() {
 		return webhookMessageRepository.findAll();
 	}
 

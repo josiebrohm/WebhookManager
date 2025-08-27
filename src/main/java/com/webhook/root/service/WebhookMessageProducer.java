@@ -3,7 +3,7 @@ package com.webhook.root.service;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.webhook.root.model.Webhook;
+import com.webhook.root.model.WebhookMessage;
 
 @Service
 public class WebhookMessageProducer {
@@ -14,8 +14,8 @@ public class WebhookMessageProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String topic, Webhook webhook) {
-        kafkaTemplate.send(topic, webhook);
+    public void sendMessage(String topic, WebhookMessage webhookMessage) {
+        kafkaTemplate.send(topic, webhookMessage);
     }
 
 }
