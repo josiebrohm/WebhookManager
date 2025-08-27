@@ -19,7 +19,6 @@ public class PublisherAccountService {
 
 	public PublisherAccount addAccount(PublisherAccount account) {
 		publisherAccountRepository.save(account);
-
 		return account;
 	}
 
