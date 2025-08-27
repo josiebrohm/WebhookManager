@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class WebhookController {
 
-    private final WebhookAdmin webhookService;
+    private final WebhookAdmin webhookAdmin;
 	private final WebhookReceiver webhookReceiver;
 
-    public WebhookController(WebhookAdmin webhookService, WebhookReceiver webhookReceiver) {
-        this.webhookService = webhookService;
+    public WebhookController(WebhookAdmin webhookAdmin, WebhookReceiver webhookReceiver) {
+        this.webhookAdmin = webhookAdmin;
 		this.webhookReceiver = webhookReceiver;
     }
 
@@ -24,7 +24,7 @@ public class WebhookController {
 
     @GetMapping("/webhooks")
     public Iterable<Webhook> getAllWebhooks() {
-        return this.webhookService.getAllWebhooks();
+        return this.webhookAdmin.getAllWebhooks();
     }
 
     @PostMapping("/webhooks")
