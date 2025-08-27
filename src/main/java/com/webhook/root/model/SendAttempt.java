@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,11 +15,12 @@ import jakarta.persistence.Table;
 public class SendAttempt {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private UUID id;
+	@Column(columnDefinition = "uuid")
+	private UUID id = UUID.randomUUID();
 
-	@Column(name = "webhook_message_id") // TODO: look into how to properly annotate foreign keys - ManyToOne, JoinColumn etc
-	private UUID webhookMessageId;
+	@ManyToOne // unsure if many to one is correct, but perhaps could be many send attempts?
+	@JoinColumn(name = "webhook_message_id", referencedColumnName = "id")
+	private WebhookMessage webhookMessage;
 
 	@Column(name = "status")
 	private String status;
@@ -42,8 +43,8 @@ public class SendAttempt {
 	@Column(name = "failed_at")
 	private Instant failedAt;
 
-	public SendAttempt(UUID webhookMessageId, String status, int retryCount, int maxRetries, Instant scheduledFor) {
-		this.webhookMessageId = webhookMessageId;
+	public SendAttempt(WebhookMessage webhookMessage, String status, int retryCount, int maxRetries, Instant scheduledFor) {
+		this.webhookMessage = webhookMessage;
 		this.status = status;
 		this.retryCount = retryCount;
 		this.maxRetries = maxRetries;
@@ -59,12 +60,12 @@ public class SendAttempt {
 		this.id = id;
 	}
 
-	public UUID getWebhookMessageId() {
-		return webhookMessageId;
+	public WebhookMessage getWebhookMessage() {
+		return webhookMessage;
 	}
 
-	public void setWebhookMessageId(UUID webhookMessageId) {
-		this.webhookMessageId = webhookMessageId;
+	public void setWebhookMessage(WebhookMessage webhookMessage) {
+		this.webhookMessage = webhookMessage;
 	}
 
 	public String getStatus() {

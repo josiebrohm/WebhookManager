@@ -5,9 +5,9 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,14 +15,16 @@ import jakarta.persistence.Table;
 public class WebhookMessage {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private UUID id;
+	@Column(columnDefinition = "uuid")
+	private UUID id = UUID.randomUUID();
 
-	@Column(name = "endpoint_id")
-	private UUID endpointId;
+	@ManyToOne // one endpoint for many potential webhooks?
+	@JoinColumn(name = "endpoint_id", referencedColumnName = "id")
+	private Endpoint endpoint;
 
-	@Column(name = "publisher_account_id")
-	private UUID publisherAccountId;
+	@ManyToOne // also potentially many webhooks published by one publisher
+	@JoinColumn(name = "publisher_account_id", referencedColumnName = "id")
+	private PublisherAccount publisherAccount;
 
 	// string for now - need to figure out best way to implement json in java, might have to make a custom class
 	@Column(name = "headers")
@@ -37,9 +39,9 @@ public class WebhookMessage {
 	@Column(name = "created_at")
 	private Instant createdAt;
 
-	public WebhookMessage(UUID endpointId, UUID publisherAccountId, String headers, String payload, String eventType) {
-		this.endpointId = endpointId;
-		this.publisherAccountId = publisherAccountId;
+	public WebhookMessage(Endpoint endpoint, PublisherAccount publisherAccount, String headers, String payload, String eventType) {
+		this.endpoint = endpoint;
+		this.publisherAccount = publisherAccount;
 		this.headers = headers;
 		this.payload = payload;
 		this.eventType = eventType;
@@ -54,20 +56,20 @@ public class WebhookMessage {
 		this.id = id;
 	}
 
-	public UUID getEndpointId() {
-		return endpointId;
+	public Endpoint getEndpoint() {
+		return endpoint;
 	}
 
-	public void setEndpointId(UUID endpointId) {
-		this.endpointId = endpointId;
+	public void setEndpoint(Endpoint endpoint) {
+		this.endpoint = endpoint;
 	}
 
-	public UUID getPublisherAccountId() {
-		return publisherAccountId;
+	public PublisherAccount getPublisherAccount() {
+		return publisherAccount;
 	}
 
-	public void setPublisherAccountId(UUID publisherAccountId) {
-		this.publisherAccountId = publisherAccountId;
+	public void setPublisherAccount(PublisherAccount publisherAccount) {
+		this.publisherAccount = publisherAccount;
 	}
 
 	public String getHeaders() {
