@@ -30,6 +30,10 @@ public class PublisherAccount {
 		this.rateLimit = rateLimit;
 	}
 
+	public PublisherAccount() {
+
+	}
+
 	public UUID getId() {
 		return id;
 	}

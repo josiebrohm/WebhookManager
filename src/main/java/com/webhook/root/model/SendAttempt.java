@@ -52,6 +52,10 @@ public class SendAttempt {
 		this.createdAt = Instant.now();
 	}
 
+	public SendAttempt() {
+		
+	}
+
 	public UUID getId() {
 		return id;
 	}

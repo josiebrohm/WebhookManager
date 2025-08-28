@@ -37,6 +37,10 @@ public class Endpoint {
 		this.enabled = enabled;
 	}
 
+	public Endpoint() {
+		
+	}
+
 	public UUID getId() {
 		return id;
 	}
