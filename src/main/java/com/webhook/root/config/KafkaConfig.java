@@ -22,7 +22,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import com.webhook.root.model.Webhook;
+import com.webhook.root.model.WebhookMessage;
 
 @Configuration
 public class KafkaConfig {
@@ -34,7 +34,7 @@ public class KafkaConfig {
     private String groupId;
 
     @Bean
-    public ConsumerFactory<String, Webhook> consumerFactory() {
+    public ConsumerFactory<String, WebhookMessage> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
 
         configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
@@ -43,15 +43,15 @@ public class KafkaConfig {
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
 
 		// Json Deserializer
-		JsonDeserializer<Webhook> deserializer = new JsonDeserializer<>(Webhook.class);
+		JsonDeserializer<WebhookMessage> deserializer = new JsonDeserializer<>(WebhookMessage.class);
 		deserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(configProps, new StringDeserializer(), deserializer);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Webhook> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Webhook> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, WebhookMessage> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, WebhookMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory());
         return factory;
