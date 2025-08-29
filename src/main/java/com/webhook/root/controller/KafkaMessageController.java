@@ -1,6 +1,6 @@
 package com.webhook.root.controller;
 
-import com.webhook.root.model.Webhook;
+import com.webhook.root.model.WebhookMessage;
 import com.webhook.root.service.WebhookMessageProducer;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +20,8 @@ public class KafkaMessageController {
     }
 
     @PostMapping
-    public String sendMessage(@PathVariable String topic, @RequestBody Webhook webhook) {
-        producerService.sendMessage(topic, webhook);
-        return "Sent: " + webhook.toString();
+    public String sendMessage(@PathVariable String topic, @RequestBody WebhookMessage webhookMessage) {
+        producerService.sendMessage(topic, webhookMessage);
+        return "Sent: " + webhookMessage.toString();
     }
 }
