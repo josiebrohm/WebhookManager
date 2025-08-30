@@ -31,5 +31,15 @@ public class WebhookMessageSender {
             System.out.println(e.getMessage());
         }
     }
+
+    public int trySend(WebhookMessage webhookMessage) {
+        double r = Math.random();
+        // 90% chance of failing
+        if (r > 0.9) {
+            return 200;
+        } else {
+            return 500;
+        }
+    }
 	
 }
