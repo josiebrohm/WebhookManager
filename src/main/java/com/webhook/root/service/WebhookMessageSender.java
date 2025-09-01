@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -32,7 +34,18 @@ public class WebhookMessageSender {
         }
     }
 
-    public int trySend(WebhookMessage webhookMessage) {
+    public HttpStatusCode tryFakeSend(WebhookMessage webhookMessage) {
+        double r = Math.random();
+        if (r < 0.1) {             // 10% return success
+            return HttpStatus.OK;
+        } else if (r < 0.2) {     // 10% return client error
+            return HttpStatus.BAD_REQUEST;
+        } else {                    // 80% return server error
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+    }
+
+    public int fakeSend(WebhookMessage webhookMessage) {
         double r = Math.random();
         // 90% chance of failing
         if (r > 0.9) {
