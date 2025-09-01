@@ -1,7 +1,7 @@
 -- Active: 1755869732761@@127.0.0.1@5432@webhook_manager_db@core
 -- Database: webhook_manager_db
 
--- DROP DATABASE IF EXISTS webhook_manager_db;
+DROP DATABASE IF EXISTS webhook_manager_db;
 
 CREATE DATABASE webhook_manager_db
     WITH
@@ -16,14 +16,14 @@ CREATE DATABASE webhook_manager_db
 
 -- SCHEMA: core
 
--- DROP SCHEMA IF EXISTS core ;
+DROP SCHEMA IF EXISTS core ;
 
 CREATE SCHEMA IF NOT EXISTS core
     AUTHORIZATION postgres;
 
 -- Table: core.endpoints
 
--- DROP TABLE IF EXISTS core.endpoints;
+DROP TABLE IF EXISTS core.endpoints;
 
 CREATE TABLE IF NOT EXISTS core.endpoints
 (
@@ -43,7 +43,7 @@ ALTER TABLE IF EXISTS core.endpoints
 
 -- Table: core.publisher_accounts
 
--- DROP TABLE IF EXISTS core.publisher_accounts;
+DROP TABLE IF EXISTS core.publisher_accounts;
 
 CREATE TABLE IF NOT EXISTS core.publisher_accounts
 (
@@ -59,36 +59,9 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS core.publisher_accounts
     OWNER to postgres;
 
--- Table: core.send_attempts
-
--- DROP TABLE IF EXISTS core.send_attempts;
-
-CREATE TABLE IF NOT EXISTS core.send_attempts
-(
-    id uuid NOT NULL,
-    webhook_message_id uuid NOT NULL,
-    status character varying COLLATE pg_catalog."default" NOT NULL,
-    retry_count integer NOT NULL DEFAULT 0,
-    max_retries integer NOT NULL,
-    scheduled_for timestamp without time zone,
-    created_at timestamp without time zone,
-    delivered_at timestamp without time zone,
-    failed_at timestamp without time zone,
-    CONSTRAINT send_attempts_pkey PRIMARY KEY (id),
-    CONSTRAINT webhook_message_id FOREIGN KEY (webhook_message_id)
-        REFERENCES core.webhook_messages (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS core.send_attempts
-    OWNER to postgres;
-
 -- Table: core.webhook_messages
 
--- DROP TABLE IF EXISTS core.webhook_messages;
+DROP TABLE IF EXISTS core.webhook_messages;
 
 CREATE TABLE IF NOT EXISTS core.webhook_messages
 (
@@ -116,3 +89,31 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS core.webhook_messages
     OWNER to postgres;
+
+-- Table: core.send_attempts
+
+DROP TABLE IF EXISTS core.send_attempts;
+
+CREATE TABLE IF NOT EXISTS core.send_attempts
+(
+    id uuid NOT NULL,
+    webhook_message_id uuid NOT NULL,
+    status character varying COLLATE pg_catalog."default" NOT NULL,
+    retry_count integer NOT NULL DEFAULT 0,
+    max_retries integer NOT NULL,
+    scheduled_for timestamp without time zone,
+    created_at timestamp without time zone,
+    delivered_at timestamp without time zone,
+    failed_at timestamp without time zone,
+    CONSTRAINT send_attempts_pkey PRIMARY KEY (id),
+    CONSTRAINT webhook_message_id FOREIGN KEY (webhook_message_id)
+        REFERENCES core.webhook_messages (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS core.send_attempts
+    OWNER to postgres;
+
