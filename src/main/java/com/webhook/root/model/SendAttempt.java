@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+// I propose we rename this to WebhookDeliveryStatus (or WebhookStatus)?
 @Entity
 @Table(name = "send_attempts")
 public class SendAttempt {
