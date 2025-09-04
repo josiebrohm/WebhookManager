@@ -5,7 +5,7 @@
 2. Start `WebhookManagerApplication.java`
 
 ### Testing authentication
-1. Make a GET request to `/test/all` (unprotected endpoint). You should get the following response: 
+1. Make a GET request to `/test/all` (unprotected endpoint). You should get the following response:  
 	`Public Content.`
 2. Make a GET request to `/test/user` (protected endpoint). You should get a `401 Unauthorized` error.
 
@@ -29,9 +29,12 @@
 	`eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0cHVibGlzaGVyYXNkYXNAZ21haWwuY29tIiwiaWF0IjoxNzU2OTg3NTkzLCJleHAiOjE3NTY5OTExOTN9.Ej7GCz_iUbjFtuhdGdqNEiAVqFprSs7fLyBPkWqgQNikfISA3uxDB8H1LbOdrj1eH0EP7N8-L_KKUqI7u6ofbw`
 
 ### Test protected endpoint
-6. Make a GET request to `/test/user` with your token included as a Header with the name "Authorization". Make sure to prefix your token with "Bearer" e.g. <br/>
-	`Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0cHVibGlzaGVyYXNkYXNAZ21haWwuY29tIiwiaWF0IjoxNzU2OTg3NTkzLCJleHAiOjE3NTY5OTExOTN9.Ej7GCz_iUbjFtuhdGdqNEiAVqFprSs7fLyBPkWqgQNikfISA3uxDB8H1LbOdrj1eH0EP7N8-L_KKUqI7u6ofbw`
+6. Make a GET request to `/test/user` with your token included as a Header with the name "Authorization". Make sure to prefix your token with "Bearer"  
+	`Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0cHVibGlzaGVyYXNkYXNAZ21haWwuY29tIiwiaWF0IjoxNzU2OTg3NTkzLCJleHAiOjE3NTY5OTExOTN9.Ej7GCz_iUbjFtuhdGdqNEiAVqFprSs7fLyBPkWqgQNikfISA3uxDB8H1LbOdrj1eH0EP7N8-L_KKUqI7u6ofbw`  
 
+	  
+	You should receive the following as a response:  
+	`User Content.`
 
 ## Creating an endpoint
 
