@@ -9,5 +9,7 @@ import com.webhook.root.model.PublisherAccount;
 
 @Repository
 public interface PublisherAccountRepository extends JpaRepository<PublisherAccount, UUID> {
+	PublisherAccount findByUsername(String username);
+	boolean existsByUsername(String username);
 	
 }
