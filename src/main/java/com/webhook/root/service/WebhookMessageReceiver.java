@@ -28,7 +28,7 @@ public class WebhookMessageReceiver {
 
 	public WebhookMessage receiveWebhookMessage(WebhookMessageRequest request) {
 		Endpoint endpoint = endpointService.findById(request.getEndpointId()).get();
-		PublisherAccount publisherAccount = accountService.findById(request.getPublisherAccountId()).get();
+		PublisherAccount publisherAccount = accountService.findById(request.getPublisherAccountId());
 
 		WebhookMessage webhookMessage = new WebhookMessage(endpoint, publisherAccount, request.getHeaders(), request.getPayload(), request.getEventType());
 		// save to DB

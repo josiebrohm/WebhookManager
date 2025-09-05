@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS core.publisher_accounts
 (
     id uuid NOT NULL,
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    api_key character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    username character varying(255) COLLATE pg_catalog."default" NOT NULL,
+	password character varying(255) COLLATE pg_catalog."default" NOT NULL,
     rate_limit integer,
     CONSTRAINT publisher_accounts_pkey PRIMARY KEY (id)
 )
@@ -76,7 +77,7 @@ CREATE TABLE IF NOT EXISTS core.send_attempts
     failed_at timestamp without time zone,
     CONSTRAINT send_attempts_pkey PRIMARY KEY (id),
     CONSTRAINT webhook_message_id FOREIGN KEY (webhook_message_id)
-        REFERENCES public.webhook_messages (id) MATCH SIMPLE
+        REFERENCES core.webhook_messages (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 )
@@ -101,12 +102,12 @@ CREATE TABLE IF NOT EXISTS core.webhook_messages
     created_at timestamp without time zone NOT NULL,
     CONSTRAINT webhook_messages_pkey PRIMARY KEY (id),
     CONSTRAINT enpoint_id FOREIGN KEY (endpoint_id)
-        REFERENCES public.endpoints (id) MATCH SIMPLE
+        REFERENCES core.endpoints (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID,
     CONSTRAINT publisher_account_id FOREIGN KEY (publisher_account_id)
-        REFERENCES public.publisher_accounts (id) MATCH SIMPLE
+        REFERENCES core.publisher_accounts (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID

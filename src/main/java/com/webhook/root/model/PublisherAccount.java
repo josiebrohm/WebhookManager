@@ -18,15 +18,19 @@ public class PublisherAccount {
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "api_key")
-	private String apiKey;
+	@Column(name = "username", unique = true)
+	private String username;
+
+	@Column(name = "password")
+	private String password;
 
 	@Column(name = "rate_limit")
 	private int rateLimit;
 
-	public PublisherAccount(String name, String apiKey, int rateLimit) {
+	public PublisherAccount(String name, String username, String password, int rateLimit) {
 		this.name = name;
-		this.apiKey = apiKey;
+		this.username = username;
+		this.password = password;
 		this.rateLimit = rateLimit;
 	}
 
@@ -50,12 +54,20 @@ public class PublisherAccount {
 		this.name = name;
 	}
 
-	public String getApiKey() {
-		return apiKey;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public int getRateLimit() {

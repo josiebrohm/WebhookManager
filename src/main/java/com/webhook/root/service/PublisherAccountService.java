@@ -1,9 +1,9 @@
 package com.webhook.root.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.webhook.root.model.PublisherAccount;
@@ -11,27 +11,44 @@ import com.webhook.root.repository.PublisherAccountRepository;
 
 @Service
 public class PublisherAccountService {
-	private final PublisherAccountRepository publisherAccountRepository;
+	private final PublisherAccountRepository publisherRepository;
+	private final BCryptPasswordEncoder passwordEncoder;
 
 	public PublisherAccountService(PublisherAccountRepository publisherAccountRepository) {
-		this.publisherAccountRepository = publisherAccountRepository;
+		this.publisherRepository = publisherAccountRepository;
+		this.passwordEncoder = new BCryptPasswordEncoder();
 	}
 
-	public PublisherAccount addAccount(PublisherAccount account) {
-		publisherAccountRepository.save(account);
-		return account;
+	public PublisherAccount addPublisher(PublisherAccount publisher) throws Exception {
+		// check if username already exists
+		if (publisherRepository.existsByUsername(publisher.getUsername())) {
+			throw new Exception("Username already exists");
+		}
+
+		// encrypt password
+		publisher.setPassword(passwordEncoder.encode(publisher.getPassword()));
+
+		// save new publisher
+		return publisherRepository.save(publisher);
 	}
 
 	public List<PublisherAccount> getAllAccounts() {
-		return publisherAccountRepository.findAll();
+		return publisherRepository.findAll();
 	}
 
-	public Optional<PublisherAccount> findById(UUID id) {
-		return publisherAccountRepository.findById(id);
+	public PublisherAccount findById(UUID id) {
+		return publisherRepository.findById(id)
+				.orElseThrow(
+					() -> new RuntimeException("User not found")
+				);
+	}
+
+	public PublisherAccount findByUsername(String username) {
+		return publisherRepository.findByUsername(username);
 	}
 
 	public void deleteById(UUID id) {
-		publisherAccountRepository.deleteById(id);
+		publisherRepository.deleteById(id);
 	}
 	
 }
