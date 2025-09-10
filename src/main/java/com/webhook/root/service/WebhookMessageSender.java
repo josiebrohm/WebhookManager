@@ -1,6 +1,7 @@
 package com.webhook.root.service;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpEntity;
@@ -28,7 +29,15 @@ public class WebhookMessageSender {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
 		// fetch the webhook from db by id
-		WebhookMessage webhookMessage = webhookMessageRepository.findById(webhookMessageId).get(); // this is bad practice, need to check if anything returned before .get
+		Optional<WebhookMessage> optional = webhookMessageRepository.findById(webhookMessageId);
+
+		// basic error handling if no webhook matching ID is found
+		if (!optional.isPresent()) {
+			System.err.println("WEBHOOK NOT FOUND");
+			return;
+		}
+
+		WebhookMessage webhookMessage = webhookMessageRepository.findById(webhookMessageId).get();
 
         HttpEntity<Map<String, Object>> payload = new HttpEntity<>(webhookMessage.getPayload(), headers);
 
