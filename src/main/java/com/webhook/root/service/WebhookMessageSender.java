@@ -1,6 +1,7 @@
 package com.webhook.root.service;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,15 +11,24 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.webhook.root.model.WebhookMessage;
+import com.webhook.root.repository.WebhookMessageRepository;
 
 @Service
 public class WebhookMessageSender {
 
 	private final RestTemplate restTemplate = new RestTemplate();
+	private final WebhookMessageRepository webhookMessageRepository;
 
-	public void sendWebhookMessage(WebhookMessage webhookMessage) {
+	public WebhookMessageSender(WebhookMessageRepository webhookMessageRepository) {
+		this.webhookMessageRepository = webhookMessageRepository;
+	}
+
+	public void sendWebhookMessage(UUID webhookMessageId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+		// fetch the webhook from db by id
+		WebhookMessage webhookMessage = webhookMessageRepository.findById(webhookMessageId).get(); // this is bad practice, need to check if anything returned before .get
 
         HttpEntity<Map<String, Object>> payload = new HttpEntity<>(webhookMessage.getPayload(), headers);
 

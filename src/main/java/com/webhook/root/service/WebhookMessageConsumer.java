@@ -1,9 +1,9 @@
 package com.webhook.root.service;
 
+import java.util.UUID;
+
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import com.webhook.root.model.WebhookMessage;
 
 @Service
 public class WebhookMessageConsumer {
@@ -15,8 +15,8 @@ public class WebhookMessageConsumer {
 	}
 
     @KafkaListener(topics = "main-topic", groupId = "${spring.kafka.consumer.group-id}")
-    public void listen(WebhookMessage webhookMessage) {
-        System.out.println("Received webhook message: " + webhookMessage.getId() + "\n" + webhookMessage.getEventType());
-		webhookMessageSender.sendWebhookMessage(webhookMessage);
+    public void listen(UUID webhookMessageId) {
+        System.out.println("Received webhook message id: " + webhookMessageId);
+		webhookMessageSender.sendWebhookMessage(webhookMessageId);
     }
 }

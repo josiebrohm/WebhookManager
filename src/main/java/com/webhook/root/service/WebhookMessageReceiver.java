@@ -35,7 +35,7 @@ public class WebhookMessageReceiver {
 		webhookMessageRepository.save(webhookMessage);
 
 		// add to kafka queue
-        producerService.sendMessage("main-topic", webhookMessage);
+        producerService.sendMessage("main-topic", webhookMessage.getId());
 
         return webhookMessage;
 	}
