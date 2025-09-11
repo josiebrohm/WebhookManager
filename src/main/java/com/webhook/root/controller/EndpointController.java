@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webhook.root.endpoint.EndpointService;
 import com.webhook.root.model.Endpoint;
-import com.webhook.root.service.EndpointService;
 
 @RestController
 @RequestMapping("/endpoints")

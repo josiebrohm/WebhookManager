@@ -1,4 +1,4 @@
-package com.webhook.root.config;
+package com.webhook.root.kafka;
 
 import java.util.HashMap;
 import java.util.Map;

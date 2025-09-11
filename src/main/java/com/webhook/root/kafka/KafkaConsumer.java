@@ -1,20 +1,21 @@
-package com.webhook.root.service;
+package com.webhook.root.kafka;
 
-import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.retry.RetryException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
+import org.springframework.kafka.annotation.DltHandler;
 
+import com.webhook.root.message.WebhookProcessor;
 import com.webhook.root.model.WebhookMessage;
 
 @Service
-public class WebhookMessageConsumer {
+public class KafkaConsumer {
 
 	private final WebhookProcessor webhookProcessor;
 
-	public WebhookMessageConsumer(WebhookProcessor webhookProcessor) {
+	public KafkaConsumer(WebhookProcessor webhookProcessor) {
 		this.webhookProcessor = webhookProcessor;
 	}
 

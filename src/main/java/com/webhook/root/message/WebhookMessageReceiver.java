@@ -1,23 +1,25 @@
-package com.webhook.root.service;
+package com.webhook.root.message;
 
 import org.springframework.stereotype.Service;
 
+import com.webhook.root.endpoint.EndpointService;
+import com.webhook.root.kafka.KafkaProducer;
 import com.webhook.root.model.Endpoint;
 import com.webhook.root.model.PublisherAccount;
 import com.webhook.root.model.WebhookMessage;
-import com.webhook.root.model.WebhookMessageRequest;
+import com.webhook.root.publisher.PublisherAccountService;
 import com.webhook.root.repository.WebhookMessageRepository;
 
 @Service
 public class WebhookMessageReceiver {
 
 	private final WebhookMessageRepository webhookMessageRepository;
-	private final WebhookMessageProducer producerService;
+	private final KafkaProducer producerService;
 	private final PublisherAccountService accountService;
 	private final EndpointService endpointService;
 
 	public WebhookMessageReceiver(WebhookMessageRepository webhookMessageRepository, 
-								WebhookMessageProducer producerService, 
+								KafkaProducer producerService, 
 								PublisherAccountService accountService, 
 								EndpointService endpointService) {
         this.webhookMessageRepository = webhookMessageRepository;

@@ -1,4 +1,4 @@
-package com.webhook.root.service;
+package com.webhook.root.endpoint;
 
 import java.util.List;
 import java.util.Optional;
