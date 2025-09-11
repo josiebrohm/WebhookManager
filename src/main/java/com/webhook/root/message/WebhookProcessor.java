@@ -1,8 +1,7 @@
-package com.webhook.root.service;
+package com.webhook.root.message;
 
 import java.time.Instant;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +10,7 @@ import com.webhook.root.model.WebhookMessage;
 import com.webhook.root.repository.SendAttemptRepository;
 
 @Service
-class WebhookProcessor {
+public class WebhookProcessor {
 
 	private final WebhookMessageSender sender;
 	private final SendAttemptRepository repo;

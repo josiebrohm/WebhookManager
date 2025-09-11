@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webhook.root.model.PublisherAccount;
-import com.webhook.root.service.PublisherAccountService;
+import com.webhook.root.publisher.PublisherAccountService;
 
 @RestController
 @RequestMapping("/accounts")

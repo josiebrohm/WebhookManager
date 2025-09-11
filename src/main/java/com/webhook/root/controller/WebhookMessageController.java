@@ -1,9 +1,9 @@
 package com.webhook.root.controller;
 
+import com.webhook.root.message.WebhookMessageReceiver;
+import com.webhook.root.message.WebhookMessageRequest;
+import com.webhook.root.message.WebhookMessageService;
 import com.webhook.root.model.WebhookMessage;
-import com.webhook.root.model.WebhookMessageRequest;
-import com.webhook.root.service.WebhookMessageReceiver;
-import com.webhook.root.service.WebhookMessageService;
 
 import java.util.List;
 
