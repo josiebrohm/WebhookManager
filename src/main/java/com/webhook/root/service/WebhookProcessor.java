@@ -26,7 +26,8 @@ class WebhookProcessor {
 	}
 
     public boolean processWebhook(WebhookMessage webhookMessage, int attemptNumber) {
-        var result = sender.trySendWebhookMessage(webhookMessage);
+        // var result = sender.trySendWebhookMessage(webhookMessage);
+		var result = sender.tryRealSendWithHighFakeFailureRate(webhookMessage);
 
 		SendAttempt attempt = new SendAttempt(
 			webhookMessage,

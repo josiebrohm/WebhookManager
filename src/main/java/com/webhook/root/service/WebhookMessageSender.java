@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -34,11 +35,31 @@ public class WebhookMessageSender {
         }
     }
 
+    public HttpStatusCode tryRealSendWithHighFakeFailureRate(WebhookMessage webhookMessage) {
+        Double r = Math.random();
+        if (r < 0.1) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<Map<String, Object>> payload = new HttpEntity<>(webhookMessage.getPayload(), headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                "https://webhook.site/c4b0e144-ea08-4772-8fa1-0611be1abf01",
+                payload,
+                String.class);
+
+            // successful
+            return response.getStatusCode();
+        } else {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+    }
+
     public HttpStatusCode trySendWebhookMessage(WebhookMessage webhookMessage) {
         Double r = Math.random();
-        if (r < 0.2) {
+        if (r < 0.05) {
             return HttpStatus.OK;
-        } else if (r < 0.4) {
+        } else if (r < 0.1) {
             return HttpStatus.NOT_FOUND;
         } else {
             return HttpStatus.INTERNAL_SERVER_ERROR;
