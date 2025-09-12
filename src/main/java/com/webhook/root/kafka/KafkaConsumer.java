@@ -1,18 +1,17 @@
-package com.webhook.root.service;
-
-import java.time.Instant;
+package com.webhook.root.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.webhook.root.message.WebhookProcessor;
 import com.webhook.root.model.WebhookMessage;
 
 @Service
-public class WebhookMessageConsumer {
+public class KafkaConsumer {
 
 	private final WebhookProcessor webhookProcessor;
 
-	public WebhookMessageConsumer(WebhookProcessor webhookProcessor) {
+	public KafkaConsumer(WebhookProcessor webhookProcessor) {
 		this.webhookProcessor = webhookProcessor;
 	}
 

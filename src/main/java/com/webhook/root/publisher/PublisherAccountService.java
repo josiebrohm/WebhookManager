@@ -1,4 +1,4 @@
-package com.webhook.root.service;
+package com.webhook.root.publisher;
 
 import java.util.List;
 import java.util.UUID;

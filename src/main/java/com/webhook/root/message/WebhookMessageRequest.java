@@ -1,4 +1,4 @@
-package com.webhook.root.model;
+package com.webhook.root.message;
 
 import java.util.Map;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package com.webhook.root.service;
+package com.webhook.root.message;
 
 import java.util.Map;
 
