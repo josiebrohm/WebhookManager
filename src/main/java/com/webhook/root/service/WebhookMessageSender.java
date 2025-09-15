@@ -44,7 +44,7 @@ public class WebhookMessageSender {
             HttpEntity<Map<String, Object>> payload = new HttpEntity<>(webhookMessage.getPayload(), headers);
 
             ResponseEntity<String> response = restTemplate.postForEntity(
-                "https://webhook.site/c4b0e144-ea08-4772-8fa1-0611be1abf01",
+                webhookMessage.getEndpoint().getUrl(),
                 payload,
                 String.class);
 
