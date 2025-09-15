@@ -42,5 +42,6 @@ public class WebhookMessageConsumer {
 	public void processMessage(WebhookMessage message) {
 		System.err.println("Failed too many times, sending message: " + message.toString() + " to the DLQ.");
 		// alertService.sendAlert("🚨 WebhookMessage send to DLQ")
+		// failedWebhookRepository.save(message); // Should we add something like this, a specific DLQ sql table to make dlq investigation and replays straightforward?
 	}
 }
