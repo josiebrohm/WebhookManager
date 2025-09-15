@@ -12,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -46,15 +49,21 @@ public class SecurityConfig {
         http
 			.csrf(csrf -> csrf.disable())
 			.cors(cors -> cors.disable())
-			.exceptionHandling(exception -> 
-					exception.authenticationEntryPoint(unauthorisedHandler)
+			.exceptionHandling(exception -> exception
+				.authenticationEntryPoint(unauthorisedHandler)
 			)
-			.sessionManagement(session -> 
-					session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.sessionManagement(session -> session
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
-			.authorizeHttpRequests(auth -> 
-					auth.requestMatchers("/auth/**", "/test/all", "/**").permitAll()
-					.anyRequest().authenticated()
+			.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/auth/**", "/test/all", "/**").permitAll()
+				.anyRequest().authenticated()
+			)
+			.securityContext(context -> context
+				.securityContextRepository(new DelegatingSecurityContextRepository(
+					new RequestAttributeSecurityContextRepository(),
+					new HttpSessionSecurityContextRepository()
+				))
 			);
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
