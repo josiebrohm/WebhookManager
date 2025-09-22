@@ -1,30 +1,11 @@
 package com.webhook.root.message;
 
 import java.util.Map;
-import java.util.UUID;
 
 public class WebhookMessageRequest {
-	private UUID endpointId;
-	private UUID publisherAccountId;
 	private Map<String, Object> headers;
 	private Map<String, Object> payload;
 	private String eventType;
-
-	public UUID getEndpointId() {
-		return endpointId;
-	}
-
-	public void setEndpointId(UUID endpointId) {
-		this.endpointId = endpointId;
-	}
-
-	public UUID getPublisherAccountId() {
-		return publisherAccountId;
-	}
-
-	public void setPublisherAccountId(UUID publisherAccountId) {
-		this.publisherAccountId = publisherAccountId;
-	}
 
 	public Map<String, Object> getHeaders() {
 		return headers;
