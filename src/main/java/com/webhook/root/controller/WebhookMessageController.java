@@ -37,21 +37,26 @@ public class WebhookMessageController {
         return this.webhookMessageService.getAllWebhookMessages();
     }
 
-	@PostMapping("/{endpoint_id}/message")
-	public WebhookMessage sendWebhookMessage(@PathVariable UUID endpoint_id, @RequestBody WebhookMessageRequest request) throws Exception {
-		// check if endpoint exists and is healthy
-		if (!endpointRepository.existsById(endpoint_id)) throw new Exception("Endpoint does not exist");
-
-		// find endpoint from path variable
-		Endpoint endpoint = endpointRepository.findById(endpoint_id).get();
-		if (!endpoint.getEnabled()) throw new Exception("Endpoint not enabled");
-
+	@PostMapping("/{endpointId}/message")
+	public WebhookMessage sendWebhookMessage(@PathVariable UUID endpointId, @RequestBody WebhookMessageRequest request) throws Exception {
 		// get publisher from security context
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getName();
 		PublisherAccount publisher = publisherRepository.findByUsername(username);
 
-		WebhookMessage message = new WebhookMessage(endpoint, publisher, request.getHeaders(), request.getPayload(), request.getEventType());
+		// find endpoint from path variable
+		Endpoint endpoint = endpointRepository.findByIdAndPublisherAccount(endpointId, publisher)
+				.orElseThrow(() -> new Exception("Endpoint not found"));
+
+		if (!endpoint.getEnabled()) throw new Exception("Endpoint not enabled");
+
+		WebhookMessage message = new WebhookMessage(
+				endpoint, 
+				publisher, 
+				request.getHeaders(), 
+				request.getPayload(), 
+				request.getEventType()
+		);
 
 		return this.webhookMessageReceiver.receiveWebhookMessage(message);
 	}
