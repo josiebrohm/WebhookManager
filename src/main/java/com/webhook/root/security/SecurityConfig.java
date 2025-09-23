@@ -1,6 +1,5 @@
 package com.webhook.root.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,19 +18,19 @@ import org.springframework.security.web.context.RequestAttributeSecurityContextR
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final JwtUtil jwtUtil;
 	
-	@Autowired
-    CustomUserDetailsService userDetailsService;
-	@Autowired
-	private AuthEntryPointJwt unauthorisedHandler;
+	private final AuthEntryPointJwt unauthorisedHandler;
 
-    SecurityConfig() {
-
+    SecurityConfig(AuthEntryPointJwt unauthorisedHandler, JwtUtil jwtUtil) {
+		this.unauthorisedHandler = unauthorisedHandler;
+		this.jwtUtil = jwtUtil;
     }
 
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
+		return new AuthTokenFilter(jwtUtil);
 	}
 
 	@Bean

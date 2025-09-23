@@ -1,6 +1,5 @@
 package com.webhook.root.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,17 +18,18 @@ import com.webhook.root.security.JwtUtil;
 @RequestMapping("/auth")
 public class AuthController {
 	
-	@Autowired
-	AuthenticationManager authManager;
+	private final AuthenticationManager authManager;
+	private final PublisherAccountRepository publisherRepository;
+	private final PasswordEncoder encoder;
+	private final JwtUtil jwtUtils;
 
-	@Autowired
-	PublisherAccountRepository publisherRepository;
+	public AuthController(AuthenticationManager authManager, PasswordEncoder encoder, JwtUtil jwtUtils, PublisherAccountRepository publisherRepository) {
+		this.authManager = authManager;
+		this.publisherRepository = publisherRepository;
+		this.encoder = encoder;
+		this.jwtUtils = jwtUtils;
 
-	@Autowired
-	PasswordEncoder encoder;
-
-	@Autowired
-	JwtUtil jwtUtils;
+	}
 
 	@PostMapping("/login")
 	public String authenticateUser(@RequestBody PublisherAccount publisher) {
