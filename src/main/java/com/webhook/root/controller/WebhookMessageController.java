@@ -8,12 +8,11 @@ import com.webhook.root.model.PublisherAccount;
 import com.webhook.root.model.WebhookMessage;
 import com.webhook.root.repository.EndpointRepository;
 import com.webhook.root.repository.PublisherAccountRepository;
+import com.webhook.root.security.SecurityUtil;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,15 +33,16 @@ public class WebhookMessageController {
 
     @GetMapping("/webhooks")
     public List<WebhookMessage> getAllWebhookMessages() {
-        return this.webhookMessageService.getAllWebhookMessages();
+		// get logged in user
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
+
+        return webhookMessageService.getWebhookMessagesByPublisher(publisher);
     }
 
 	@PostMapping("/{endpointId}/message")
 	public WebhookMessage sendWebhookMessage(@PathVariable UUID endpointId, @RequestBody WebhookMessageRequest request) throws Exception {
 		// get publisher from security context
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-		PublisherAccount publisher = publisherRepository.findByUsername(username);
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
 
 		// find endpoint from path variable
 		Endpoint endpoint = endpointRepository.findByIdAndPublisherAccount(endpointId, publisher)
@@ -58,6 +58,6 @@ public class WebhookMessageController {
 				request.getEventType()
 		);
 
-		return this.webhookMessageReceiver.receiveWebhookMessage(message);
+		return webhookMessageReceiver.receiveWebhookMessage(message);
 	}
 }

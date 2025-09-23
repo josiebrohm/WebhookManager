@@ -2,8 +2,6 @@ package com.webhook.root.controller;
 
 import java.util.List;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +12,7 @@ import com.webhook.root.endpoint.EndpointService;
 import com.webhook.root.model.Endpoint;
 import com.webhook.root.model.PublisherAccount;
 import com.webhook.root.repository.PublisherAccountRepository;
+import com.webhook.root.security.SecurityUtil;
 
 @RestController
 @RequestMapping("/endpoints")
@@ -30,9 +29,7 @@ public class EndpointController {
 	@GetMapping
 	public List<Endpoint> getAllEndpoints() {
 		// get logged in user
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-		PublisherAccount publisher = publisherRepository.findByUsername(username);
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
 
 		return endpointService.getEndpointsByPublisher(publisher);
 	}
@@ -40,9 +37,7 @@ public class EndpointController {
 	@PostMapping
 	public Endpoint addEndpoint(@RequestBody Endpoint endpoint) {
 		// get logged in user
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-		PublisherAccount publisher = publisherRepository.findByUsername(username);
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
 
 		// associate endpoint with creator
 		endpoint.setPublisherAccount(publisher);

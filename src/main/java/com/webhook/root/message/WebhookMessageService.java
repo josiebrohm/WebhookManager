@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.webhook.root.model.PublisherAccount;
 import com.webhook.root.model.WebhookMessage;
 import com.webhook.root.repository.WebhookMessageRepository;
 
@@ -24,6 +25,10 @@ public class WebhookMessageService {
 
 	public List<WebhookMessage> getAllWebhookMessages() {
 		return webhookMessageRepository.findAll();
+	}
+
+	public List<WebhookMessage> getWebhookMessagesByPublisher(PublisherAccount publisher) {
+
 	}
 
 	public Optional<WebhookMessage> findById(UUID id) {
