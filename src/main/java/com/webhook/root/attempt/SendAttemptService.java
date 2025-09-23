@@ -22,7 +22,7 @@ public class SendAttemptService {
 		return sendAttempt;
 	}
 
-	public List<SendAttempt> getAllEndpoints() {
+	public List<SendAttempt> getAllSendAttempts() {
 		return sendAttemptRepository.findAll();
 	}
 
