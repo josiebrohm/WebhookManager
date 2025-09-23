@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.webhook.root.model.Endpoint;
+import com.webhook.root.model.PublisherAccount;
 import com.webhook.root.repository.EndpointRepository;
 
 @Service
@@ -18,12 +19,15 @@ public class EndpointService {
 	}
 
 	public Endpoint addEndpoint(Endpoint endpoint) {
-		endpointRepository.save(endpoint);
-		return endpoint;
+		return endpointRepository.save(endpoint);
 	}
 
 	public List<Endpoint> getAllEndpoints() {
 		return endpointRepository.findAll();
+	}
+
+	public List<Endpoint> getEndpointsByPublisher(PublisherAccount publisher) {
+		return endpointRepository.findByPublisherAccount(publisher);
 	}
 
 	public Optional<Endpoint> findById(UUID id) {

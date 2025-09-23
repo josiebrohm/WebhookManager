@@ -18,6 +18,11 @@ public class TestController {
 	public String userAccess() {
 		return "User content";
 	}
+
+	@GetMapping("/admin")
+	public String adminAccess() {
+		return "Admin content";
+	}
 	
 	
 }

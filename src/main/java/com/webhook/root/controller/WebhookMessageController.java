@@ -8,12 +8,11 @@ import com.webhook.root.model.PublisherAccount;
 import com.webhook.root.model.WebhookMessage;
 import com.webhook.root.repository.EndpointRepository;
 import com.webhook.root.repository.PublisherAccountRepository;
+import com.webhook.root.security.SecurityUtil;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,25 +33,31 @@ public class WebhookMessageController {
 
     @GetMapping("/webhooks")
     public List<WebhookMessage> getAllWebhookMessages() {
-        return this.webhookMessageService.getAllWebhookMessages();
+		// get logged in user
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
+
+        return webhookMessageService.getWebhookMessagesByPublisher(publisher);
     }
 
-	@PostMapping("/{endpoint_id}/message")
-	public WebhookMessage sendWebhookMessage(@PathVariable UUID endpoint_id, @RequestBody WebhookMessageRequest request) throws Exception {
-		// check if endpoint exists and is healthy
-		if (!endpointRepository.existsById(endpoint_id)) throw new Exception("Endpoint does not exist");
+	@PostMapping("/{endpointId}/message")
+	public WebhookMessage sendWebhookMessage(@PathVariable UUID endpointId, @RequestBody WebhookMessageRequest request) throws Exception {
+		// get publisher from security context
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
 
 		// find endpoint from path variable
-		Endpoint endpoint = endpointRepository.findById(endpoint_id).get();
+		Endpoint endpoint = endpointRepository.findByIdAndPublisherAccount(endpointId, publisher)
+				.orElseThrow(() -> new Exception("Endpoint not found"));
+
 		if (!endpoint.getEnabled()) throw new Exception("Endpoint not enabled");
 
-		// get publisher from security context
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String username = auth.getName();
-		PublisherAccount publisher = publisherRepository.findByUsername(username);
+		WebhookMessage message = new WebhookMessage(
+				endpoint, 
+				publisher, 
+				request.getHeaders(), 
+				request.getPayload(), 
+				request.getEventType()
+		);
 
-		WebhookMessage message = new WebhookMessage(endpoint, publisher, request.getHeaders(), request.getPayload(), request.getEventType());
-
-		return this.webhookMessageReceiver.receiveWebhookMessage(message);
+		return webhookMessageReceiver.receiveWebhookMessage(message);
 	}
 }

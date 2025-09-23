@@ -1,5 +1,9 @@
 package com.webhook.root.security;
 
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -7,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.webhook.root.model.PublisherAccount;
 import com.webhook.root.repository.PublisherAccountRepository;
-
-import io.jsonwebtoken.lang.Collections;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -27,10 +29,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("Publisher not found with username " + username);
 		}
 
+		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + publisher.getRole());
+
 		return new org.springframework.security.core.userdetails.User(
 			publisher.getUsername(),
 			publisher.getPassword(),
-			Collections.emptyList()
+			List.of(authority)
 		);
 	}
 	

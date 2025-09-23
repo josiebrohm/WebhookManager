@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -14,6 +16,9 @@ public class PublisherAccount {
 	@Id
 	@Column(columnDefinition = "uuid")
 	private UUID id = UUID.randomUUID();
+
+	@Enumerated(EnumType.STRING)
+	private Role role = Role.PUBLISHER;
 
 	@Column(name = "name")
 	private String name;
@@ -36,6 +41,10 @@ public class PublisherAccount {
 
 	public PublisherAccount() {
 
+	}
+
+	public Role getRole() {
+		return role;
 	}
 
 	public UUID getId() {

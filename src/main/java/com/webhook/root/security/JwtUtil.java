@@ -6,6 +6,9 @@ import java.util.Date;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -32,9 +35,15 @@ public class JwtUtil {
 	}
 
 	// generate JWT token
-	public String generateToken(String username) {
+	public String generateToken(UserDetails userDetails) {
+		String role = userDetails.getAuthorities().stream()
+						.findFirst()
+						.map(GrantedAuthority::getAuthority)
+						.orElse("ROLE_PUBLISHER");
+
 		return Jwts.builder()
-				.subject(username)
+				.subject(userDetails.getUsername())
+				.claim("role", role)
 				.issuedAt(new Date())
 				.expiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(key)
@@ -49,6 +58,18 @@ public class JwtUtil {
 				.parseSignedClaims(token)
 				.getPayload()
 				.getSubject();
+	}
+
+	// get role from token
+	public SimpleGrantedAuthority getAuthorityFromToken(String token) {
+		return new SimpleGrantedAuthority(
+						Jwts.parser()
+						.verifyWith(key)
+						.build()
+						.parseSignedClaims(token)
+						.getPayload()
+						.get("role", String.class)
+					);
 	}
 
 	// validate jwt

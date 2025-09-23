@@ -6,6 +6,8 @@ import java.util.UUID;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,6 +17,10 @@ public class Endpoint {
 	@Id
 	@Column(columnDefinition = "uuid")
 	private UUID id = UUID.randomUUID();
+
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "publisher_account_id", referencedColumnName = "id")
+	private PublisherAccount publisherAccount;
 
 	@Column(name = "url")
 	private String url;
@@ -47,6 +53,14 @@ public class Endpoint {
 
 	public void setId(UUID id) {
 		this.id = id;
+	}
+
+	public PublisherAccount getPublisherAccount() {
+		return publisherAccount;
+	}
+
+	public void setPublisherAccount(PublisherAccount publisherAccount) {
+		this.publisherAccount = publisherAccount;
 	}
 
 	public String getUrl() {

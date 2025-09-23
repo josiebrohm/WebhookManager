@@ -1,11 +1,11 @@
 package com.webhook.root.security;
 
 import java.io.IOException;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,13 +18,10 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-	@Autowired
-	private JwtUtil jwtUtils;
-	@Autowired
-	private CustomUserDetailsService userDetailsService;
+	private JwtUtil jwtUtil;
 
-	public AuthTokenFilter() {
-		
+	public AuthTokenFilter(JwtUtil jwtUtil) {
+		this.jwtUtil = jwtUtil;
 	}
 
 	@Override
@@ -33,12 +30,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		try {
 			String jwt = parseJwt(request);
 
-			if (jwt != null  && jwtUtils.validateJwtToken(jwt)) {
-				String username = jwtUtils.getUsernameFromToken(jwt);
+			if (jwt != null  && jwtUtil.validateJwtToken(jwt)) {
+				String username = jwtUtil.getUsernameFromToken(jwt);
+				SimpleGrantedAuthority authority = jwtUtil.getAuthorityFromToken(jwt);
 
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authenticationToken =
-					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+					new UsernamePasswordAuthenticationToken(username, null, List.of(authority));
 
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
