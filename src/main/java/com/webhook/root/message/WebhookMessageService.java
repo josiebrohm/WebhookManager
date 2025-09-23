@@ -28,7 +28,7 @@ public class WebhookMessageService {
 	}
 
 	public List<WebhookMessage> getWebhookMessagesByPublisher(PublisherAccount publisher) {
-
+		return webhookMessageRepository.findByPublisherAccount(publisher);
 	}
 
 	public Optional<WebhookMessage> findById(UUID id) {

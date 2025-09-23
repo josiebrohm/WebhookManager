@@ -43,6 +43,10 @@ public class PublisherAccount {
 
 	}
 
+	public String getRole() {
+		return role.toString();
+	}
+
 	public UUID getId() {
 		return id;
 	}

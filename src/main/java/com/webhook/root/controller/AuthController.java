@@ -41,7 +41,7 @@ public class AuthController {
 		);
 
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
-		return jwtUtils.generateToken(userDetails.getUsername());
+		return jwtUtils.generateToken(userDetails);
 	}
 
 	@PostMapping("/register")

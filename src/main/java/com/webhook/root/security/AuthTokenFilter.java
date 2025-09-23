@@ -1,11 +1,12 @@
 package com.webhook.root.security;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,8 +21,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private JwtUtil jwtUtils;
-	@Autowired
-	private CustomUserDetailsService userDetailsService;
 
 	public AuthTokenFilter() {
 		
@@ -35,10 +34,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 			if (jwt != null  && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUsernameFromToken(jwt);
+				SimpleGrantedAuthority authority = jwtUtils.getAuthorityFromToken(jwt);
 
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authenticationToken =
-					new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+					new UsernamePasswordAuthenticationToken(username, null, List.of(authority));
 
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
