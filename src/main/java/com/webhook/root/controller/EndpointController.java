@@ -10,25 +10,38 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webhook.root.endpoint.EndpointService;
 import com.webhook.root.model.Endpoint;
+import com.webhook.root.model.PublisherAccount;
+import com.webhook.root.repository.PublisherAccountRepository;
+import com.webhook.root.security.SecurityUtil;
 
 @RestController
 @RequestMapping("/endpoints")
 public class EndpointController {
 	
 	private final EndpointService endpointService;
+	private final PublisherAccountRepository publisherRepository;
 
-	public EndpointController(EndpointService endpointService) {
+	public EndpointController(EndpointService endpointService, PublisherAccountRepository publisherRepository) {
 		this.endpointService = endpointService;
+		this.publisherRepository = publisherRepository;
 	}
 
 	@GetMapping
 	public List<Endpoint> getAllEndpoints() {
-		return this.endpointService.getAllEndpoints();
+		// get logged in user
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
+
+		return endpointService.getEndpointsByPublisher(publisher);
 	}
 
 	@PostMapping
 	public Endpoint addEndpoint(@RequestBody Endpoint endpoint) {
-		endpointService.addEndpoint(endpoint);
-		return endpoint;
+		// get logged in user
+		PublisherAccount publisher = SecurityUtil.getCurrentPublisher(publisherRepository);
+
+		// associate endpoint with creator
+		endpoint.setPublisherAccount(publisher);
+
+		return endpointService.addEndpoint(endpoint);
 	}
 }
