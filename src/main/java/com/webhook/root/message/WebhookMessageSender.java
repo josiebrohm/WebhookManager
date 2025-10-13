@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.webhook.root.model.WebhookMessage;
@@ -17,33 +16,32 @@ import com.webhook.root.model.WebhookMessage;
 @Service
 public class WebhookMessageSender {
 
-	private final RestTemplate restTemplate = new RestTemplate();
+	private final RestTemplate webhookRestTemplate;
 
-	public void sendWebhookMessage(WebhookMessage webhookMessage) {
+	public WebhookMessageSender(RestTemplate webhookRestTemplate) {
+		this.webhookRestTemplate = webhookRestTemplate;
+	}
+
+	public HttpStatusCode sendWebhookMessage(WebhookMessage webhookMessage) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Map<String, Object>> payload = new HttpEntity<>(webhookMessage.getPayload(), headers);
 
-        try {
-            String response = restTemplate.postForObject(webhookMessage.getEndpoint().getUrl(), payload, String.class);
-            System.out.println("Webhook forwarding successful");
-            System.out.println(response);
-        } catch (RestClientException e){
-            System.out.println("Error forwarding webhook: ");
-            System.out.println(e.getMessage());
-        }
+		ResponseEntity<String> response = webhookRestTemplate.postForEntity(webhookMessage.getEndpoint().getUrl(), payload, String.class);
+
+        return response.getStatusCode();
     }
 
     public HttpStatusCode tryRealSendWithHighFakeFailureRate(WebhookMessage webhookMessage) {
         Double r = Math.random();
-        if (r < 0.1) {
+        if (r < 0.9) {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             HttpEntity<Map<String, Object>> payload = new HttpEntity<>(webhookMessage.getPayload(), headers);
 
-            ResponseEntity<String> response = restTemplate.postForEntity(
+            ResponseEntity<String> response = webhookRestTemplate.postForEntity(
                 webhookMessage.getEndpoint().getUrl(),
                 payload,
                 String.class);
